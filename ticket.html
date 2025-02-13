@@ -248,41 +248,48 @@
         });
 
         async function purchaseTicket(amount) {
-            // Cüzdan bağlı mı kontrol et
-            if (!tonConnectUI.wallet) {
-                alert("Lütfen önce TON cüzdanınıza bağlanın!");
-                return; // İşlemi durdur
-            }
-
-            const transaction = {
-                to: "EQBX63RAdgShn34EAFMV73Cut7Z15lUZd1hnVva68SEl7sxi",  // Doğru adresi ekleyin
-                amount: amount.toString()
-            };
-
-            try {
-                const result = await tonConnectUI.sendTransaction(transaction);
-                console.log("İşlem başarılı:", result);
-                alert("Satın alma işlemi başarılı!");
-            } catch (error) {
-                console.error("İşlem hatası:", error);
-                alert("Satın alma işlemi başarısız. Lütfen tekrar deneyin.");
-            }
+        if (!tonConnectUI.wallet) {
+            alert("Lütfen önce TON cüzdanınıza bağlanın!");
+            return;
         }
 
-        // Buton event listener'ları
-        document.querySelectorAll('.purchase-button').forEach(button => {
-            button.addEventListener('click', function() {
-                const amount = this.getAttribute('data-amount');
-                
-                // Ekstra güvenlik kontrolü
-                if (!tonConnectUI.wallet) {
-                    alert("Cüzdan bağlantısı yok! Lütfen bağlanın.");
-                    return;
+        const transaction = {
+            messages: [
+                {
+                    address: "EQBX63RAdgShn34EAFMV73Cut7Z15lUZd1hnVva68SEl7sxi", // Adresinizi 2 kez kontrol edin
+                    amount: amount.toString(),
+                    payload: "te6cckEBAQEAAwAAAEAAAAA=" // Boş payload (Base64 encoded)
                 }
-                
-                purchaseTicket(amount);
-            });
+            ],
+            validUntil: Math.floor(Date.now() / 1000) + 300 // 5 dakika geçerlilik
+        };
+
+        try {
+            const result = await tonConnectUI.sendTransaction(transaction);
+            console.log("İşlem hash:", result.boc);
+            alert("İşlem başarıyla gönderildi!");
+        } catch (error) {
+            console.error("Hata:", error);
+            alert(`İşlem başarısız: ${error.message}`);
+        }
+    }
+
+    // Butonlara Tıklama Olayı
+    document.querySelectorAll('.purchase-button').forEach(button => {
+        button.addEventListener('click', function() {
+            const amount = this.getAttribute('data-amount');
+            
+            // Miktarı kontrol et (1 TON = 1.000.000.000 nanotON)
+            if (isNaN(amount) {
+                alert("Geçersiz miktar!");
+                return;
+            }
+            
+            purchaseTicket(amount);
         });
+    });
+
+        
 
         function addClickEffect(button) {
             button.classList.add('clicked');
