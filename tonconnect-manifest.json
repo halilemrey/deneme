@@ -1,5 +1,7 @@
 {
-    "url": "https://halilemrey.github.io/deneme/",
-    "name": "TON Vote"
-    
+  "url": "https://halilemrey.github.io/deneme/",
+  "name": "My TON App",
+  "iconUrl": "https://halilemrey.github.io/deneme/icon.png",
+  "termsOfUseUrl": "https://halilemrey.github.io/deneme/terms-of-use.html",
+  "privacyPolicyUrl": "https://halilemrey.github.io/deneme/privacy-policy.html"
 }
