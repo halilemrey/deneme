@@ -220,9 +220,9 @@
 
     <!-- Üst Butonlar -->
     <div class="top-button-container">
-        <button id="purchase-button-1" class="purchase-button" data-amount="10000000">BUY (0.4) TON</button>
+        <button id="purchase-button-1" class="purchase-button" data-amount="4000000">BUY (0.4) TON</button>
         <button id="purchase-button-2" class="purchase-button" data-amount="20000000">BUY (2) TON</button>
-        <button id="purchase-button-3" class="purchase-button" data-amount="50000000">BUY (4) TON</button>
+        <button id="purchase-button-3" class="purchase-button" data-amount="40000000">BUY (4) TON</button>
     </div>
     
     <div class="button-container">
@@ -246,16 +246,22 @@
     <script>
         
         const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
-            manifestUrl: 'https://<YOUR_APP_URL>/tonconnect-manifest.json',
+            manifestUrl: 'https://halilemrey.github.io/deneme/tonconnect-manifest.json',
             buttonRootId: 'ton-connect'
         });
 
         async function purchaseTicket(amount) {
+            // Cüzdan bağlı mı kontrol et
+            if (!tonConnectUI.wallet) {
+                alert("Lütfen önce TON cüzdanınıza bağlanın!");
+                return; // İşlemi durdur
+            }
+
             const transaction = {
                 messages: [
                     {
-                        address: "EQABa48hjKzg09hN_HjxOic7r8T1PleIy1dRd8NvZ3922MP0", // Satıcı adresi
-                        amount: amount.toString() // Butondan gelen miktar
+                        address: "EQBX63RAdgShn34EAFMV73Cut7Z15lUZd1hnVva68SEl7sxi",
+                        amount: amount.toString()
                     }
                 ]
             };
@@ -270,13 +276,18 @@
             }
         }
 
-        
-
-        // Tüm satın alma butonlarına event listener ekle
+        // Buton event listener'ları
         document.querySelectorAll('.purchase-button').forEach(button => {
-            button.addEventListener('click', function () {
-                const amount = this.getAttribute('data-amount'); // Butonun data-amount özelliğini al
-                purchaseTicket(amount); // İşlemi başlat
+            button.addEventListener('click', function() {
+                const amount = this.getAttribute('data-amount');
+                
+                // Ekstra güvenlik kontrolü
+                if (!tonConnectUI.wallet) {
+                    alert("Cüzdan bağlantısı yok! Lütfen bağlanın.");
+                    return;
+                }
+                
+                purchaseTicket(amount);
             });
         });
 
